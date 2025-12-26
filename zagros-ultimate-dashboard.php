@@ -568,7 +568,7 @@ class Zagros_Ultimate_Dashboard {
                 <div class="zagros-glass-card zagros-clarity-container">
                     <h3 style="margin-top: 0; color: rgba(255, 255, 255, 0.9);">🔍 Microsoft Clarity Live Dashboard</h3>
                     <iframe src="<?php echo esc_url($clarity_url); ?>" 
-                            sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                            sandbox="allow-scripts allow-forms allow-popups"
                             loading="lazy"></iframe>
                 </div>
                 <?php else: ?>
@@ -722,15 +722,16 @@ class Zagros_Ultimate_Dashboard {
                     $total_users += $users;
                     
                     // Format date for chart (YYYYMMDD -> MMM DD)
-                    $formatted_date = date('M d', strtotime($date));
+                    $date_obj = DateTime::createFromFormat('Ymd', $date, wp_timezone());
+                    $formatted_date = $date_obj ? $date_obj->format('M d') : date('M d', strtotime($date));
                     $chart_labels[] = $formatted_date;
                     $chart_data[] = $sessions;
                 }
             }
             
             $result = [
-                'total_sessions' => number_format($total_sessions),
-                'total_users' => number_format($total_users),
+                'total_sessions' => number_format_i18n($total_sessions),
+                'total_users' => number_format_i18n($total_users),
                 'chart_data' => [
                     'labels' => $chart_labels,
                     'data' => $chart_data
